@@ -3,6 +3,8 @@ package tests;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selectors;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -30,22 +32,21 @@ public class MainFlowTests extends TestBase {
         //open url and follow the second feature link
         open("");
         $$(".featuresInfo").get(1).$(byText("Узнать подробнее")).click();
+        //check opened page
+        $(".touch_subtitle").shouldHave(text("Касса в лучшем виде"));
         $(byText("Запросить презентацию")).click();
         //fill a form
         Faker faker = new Faker();
-
-        sleep(3000);
-
-        element("#field_LEAD_NAME").click();
-        $(byName("LEAD_NAME")).click();
-        $("#LEAD_NAME").click();//.setValue(faker.name().firstName());
-        $("#LEAD_LAST_NAME_CONT").setValue(faker.name().lastName());
+        SelenideElement bx_form_iframe_8 = $(byName("bx_form_iframe_8"));
+        switchTo().frame(bx_form_iframe_8);
+        $("#LEAD_NAME").setValue(faker.name().firstName());
+        $("#LEAD_LAST_NAME").setValue(faker.name().lastName());
         $("#LEAD_EMAIL").setValue(faker.internet().emailAddress());
-        $("#LEAD_PHONE").setValue(faker.phoneNumber().phoneNumber());
+        $(".crm-webform-input-phone").setValue(faker.phoneNumber().phoneNumber());
         $("#LEAD_COMPANY_TITLE").setValue(faker.company().name());
-        //$("#SUBMIT_BUTTON").click();
-
-        sleep(3000);
+        $("#SUBMIT_BUTTON").click();
+        //check that form is closed
+        $(".touch_subtitle").shouldHave(text("Касса в лучшем виде"));
     }
 
 }
