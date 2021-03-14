@@ -33,6 +33,10 @@ public class MainFlowTests extends TestBase {
         $(byText("Запросить презентацию")).click();
         //fill a form
         Faker faker = new Faker();
+
+        sleep(3000);
+
+        element("#field_LEAD_NAME").click();
         $(byName("LEAD_NAME")).click();
         $("#LEAD_NAME").click();//.setValue(faker.name().firstName());
         $("#LEAD_LAST_NAME_CONT").setValue(faker.name().lastName());
