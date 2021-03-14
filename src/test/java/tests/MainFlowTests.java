@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byName;
-import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 
 @Tag("web ")
@@ -44,9 +43,28 @@ public class MainFlowTests extends TestBase {
         $("#LEAD_EMAIL").setValue(faker.internet().emailAddress());
         $(".crm-webform-input-phone").setValue(faker.phoneNumber().phoneNumber());
         $("#LEAD_COMPANY_TITLE").setValue(faker.company().name());
-        $("#SUBMIT_BUTTON").click();
+        //$("#SUBMIT_BUTTON").click();
         //check that form is closed
         $(".touch_subtitle").shouldHave(text("Касса в лучшем виде"));
     }
+    @Test
+    @DisplayName("Follow second feature link and request a presentation")
+    void downloadSupport(){
+        //open url
+        open("");
+        $(byAttribute("data-submenu","headerSubMenuSupport")).click();
+        $(byText("Загрузки")).click();
+
+        ElementsCollection products = $$(".download-product");
+        products.get(0).click();
+
+        SelenideElement nodFrom = $(byText("Дистрибутивы Set Prisma"));
+        nodFrom.sibling(0).click();
+
+        sleep(10000);
+
+    }
+
+
 
 }
