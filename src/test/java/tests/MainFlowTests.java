@@ -82,7 +82,6 @@ public class MainFlowTests extends TestBase {
         $(byName("email")).setValue(faker.internet().emailAddress());
         $(byText("Подписаться")).click();
         $("._form-thank-you").shouldBe(visible);
-        sleep(2000);
     }
 
 
