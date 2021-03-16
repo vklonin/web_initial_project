@@ -6,16 +6,23 @@ import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.github.javafaker.Faker;
+import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 
 @Tag("web ")
 public class MainFlowTests extends TestBase {
+
+    Faker faker = new Faker();
+
     @Test
     @DisplayName("On a mine page must be following titles \"Set Retail\" , \"Set Touch\", \"Set Prisma\" ")
     void titlePageOpenTest(){
@@ -35,7 +42,6 @@ public class MainFlowTests extends TestBase {
         $(".touch_subtitle").shouldHave(text("Касса в лучшем виде"));
         $(byText("Запросить презентацию")).click();
         //fill a form
-        Faker faker = new Faker();
         SelenideElement bx_form_iframe_8 = $(byName("bx_form_iframe_8"));
         switchTo().frame(bx_form_iframe_8);
         $("#LEAD_NAME").setValue(faker.name().firstName());
@@ -48,23 +54,36 @@ public class MainFlowTests extends TestBase {
         $(".touch_subtitle").shouldHave(text("Касса в лучшем виде"));
     }
     @Test
-    @DisplayName("Follow second feature link and request a presentation")
+    @DisplayName("Download documentation")
     void downloadSupport(){
         //open url
         open("");
         $(byAttribute("data-submenu","headerSubMenuSupport")).click();
         $(byText("Загрузки")).click();
-
         ElementsCollection products = $$(".download-product");
         products.get(0).click();
-
-        SelenideElement nodFrom = $(byText("Дистрибутивы Set Prisma"));
-        nodFrom.sibling(0).click();
-
-        sleep(10000);
-
+        SelenideElement nodFrom = $(byText("Документация"));
+        Boolean fileDownloaded = false;
+        try { File docFile = nodFrom.sibling(0).lastChild().download(1000);
+            fileDownloaded = docFile.isFile();
+            docFile.delete();
+        } catch(Exception e){
+            System.out.println("No file found");
+        };
+        Assert.assertTrue(fileDownloaded);
     }
 
+    @Test
+    @DisplayName("Follow blog link, subscribe with email")
+    void subscribe(){
+        //open url
+        open("");
+        $(byText("Блог")).click();
+        $(byName("email")).setValue(faker.internet().emailAddress());
+        $(byText("Подписаться")).click();
+        $("._form-thank-you").shouldBe(visible);
+        sleep(2000);
+    }
 
 
 }
