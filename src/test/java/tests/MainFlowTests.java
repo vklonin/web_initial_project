@@ -85,7 +85,7 @@ public class MainFlowTests extends TestBase {
     }
 
     @Test
-    @DisplayName("Lookong for specific product")
+    @DisplayName("Looking for specific product")
     void checkProduct(){
         //open url
         open("");
