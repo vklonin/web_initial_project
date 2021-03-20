@@ -84,5 +84,29 @@ public class MainFlowTests extends TestBase {
         $("._form-thank-you").shouldBe(visible);
     }
 
+    @Test
+    @DisplayName("Lookong for specific product")
+    void checkProduct(){
+        //open url
+        open("");
+        $(byText("Продукты")).click();
+        $(byText("Системные блоки")).click();
+        $(byName("itemprop")).shouldHave(text("Системный блок CSI RX2"));
+    }
+
+    @Test
+    @DisplayName("Check if at least one vacancy in Moscow")
+    void checkVacancy(){
+        //open url
+        open("");
+        $(byText("О нас")).click();
+        $(byText("Вакансии")).click();
+        $(byText("Москва")).click();
+        Assert.assertTrue(!$$(".vacancyItemTitle").isEmpty());
+    }
+
+
+
+
 
 }
