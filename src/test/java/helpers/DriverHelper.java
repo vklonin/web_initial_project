@@ -1,9 +1,10 @@
 package helpers;
 
 import com.codeborne.selenide.Configuration;
+import config.ConfigHelper;
 
 public class DriverHelper {
     public static void configureDriver(){
-        Configuration.baseUrl = "https://www.crystals.ru/";
+        Configuration.baseUrl = ConfigHelper.getBaseURL();
     }
 }
